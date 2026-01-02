@@ -26,3 +26,12 @@ Controller → Service → Repository
 
 ## Swagger
 http://localhost:8080/swagger-ui.html
+
+## Dependencies
+
+✔ Spring Web
+✔ Spring Data JPA
+✔ Spring Security
+✔ MySQL Driver
+✔ Lombok
+✔ Validation
