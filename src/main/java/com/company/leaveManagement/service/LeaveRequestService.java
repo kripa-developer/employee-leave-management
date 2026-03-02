@@ -45,7 +45,7 @@ public class LeaveRequestService {
 
     @Transactional
     public LeaveRequest decide(Long leaveRequestId, LeaveDecisionRequest request) {
-        LeaveRequest leaveRequest = leaveRequestRepository.findById(leaveRequestId)
+        LeaveRequest leaveRequest = leaveRequestRepository.findWithLockingById(leaveRequestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Leave request not found with id: " + leaveRequestId));
 
         if (leaveRequest.getStatus() != LeaveStatus.PENDING) {
@@ -67,7 +67,6 @@ public class LeaveRequestService {
                 throw new BusinessException("Insufficient leave balance at approval stage");
             }
             employee.setLeaveBalance((int) (employee.getLeaveBalance() - leaveDays));
-            employeeRepository.save(employee);
         }
 
         return leaveRequestRepository.save(leaveRequest);

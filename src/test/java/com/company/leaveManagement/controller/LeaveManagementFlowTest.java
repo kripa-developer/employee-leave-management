@@ -1,5 +1,6 @@
 package com.company.leaveManagement.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -63,5 +64,15 @@ class LeaveManagementFlowTest {
                         .content(decisionPayload))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("APPROVED"));
+
+        mockMvc.perform(put("/api/leaves/1/decision")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(decisionPayload))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Only pending leave requests can be processed"));
+
+        mockMvc.perform(get("/api/employees/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.leaveBalance").value(7));
     }
 }
